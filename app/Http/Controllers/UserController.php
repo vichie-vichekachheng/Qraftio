@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Category;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductCart;
 use App\Models\User;
@@ -94,7 +95,7 @@ public function allProducts(Product $product){
     if(Auth::check()){
             $count = ProductCart::where('user_id',Auth::id())->count();
         } else{
-            $count="";
+            $count=0;
         }
     $products = Product::paginate(8);
     return view('allProducts', compact('products', 'count'));
@@ -104,12 +105,35 @@ public function viewCart(){
             $count = ProductCart::where('user_id',Auth::id())->count();
             $carts = ProductCart::where('user_id', Auth::id())->get();
         } else{
-            $count="";
+            $count=0;
         }
     return view('user.viewCart', compact('count', 'carts'));
 }
 public function deleteItem(ProductCart $cart){
     $cart->delete();
     return redirect()->route('viewCart')->with('success', "Item delete from Cart Successfully!");
+}
+public function checkOut(){
+    if((Auth::check())){
+        $count = ProductCart::where('user_id', Auth::id())->count();
+        $carts = ProductCart::where('user_id', Auth::id())->get();
+    } else{
+        $count = 0;
+    }
+    return view('user.checkout', compact('count', 'carts'));
+}
+public function confirm_order(Request $request){
+    $car_product_id = ProductCart::where('user_id', Auth::id())->get();
+    $address = $request->address;
+    $phone_number = $request->phone_number;
+    foreach($car_product_id as $cart_product){
+    $orders = new Order;
+    $orders->address=$address;
+    $orders->phone_number=$phone_number;
+    $orders->user_id = Auth::id();
+    $orders->product_id= $cart_product->product_id;
+    $orders->save();
+    }
+    return redirect()->route('checkOut')->with("success", "Ordered Successfully!, Please be patient until our team contact to you!");
 }
 }

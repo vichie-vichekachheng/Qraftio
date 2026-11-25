@@ -4,13 +4,18 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-
+Route::get('/', function () {
+    return view('welcome');
+});
 Route::get('/', [UserController::class, 'home'])->name('index');
-
-Route::get('/dashboard',[UserController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/checkOut', [UserController::class, 'checkOut'])->name('user.checkOut');
+Route::get('/dashboard',[UserController::class, 'index'])->middleware(['auth', 'verified'])->name('user.dashboard');
 Route::get('/addTocart/{id}',[UserController::class, 'addToCart'])->middleware(['auth', 'verified'])->name('addToCart');
 Route::get('/allProducts',[UserController::class, 'allProducts'])->middleware(['auth', 'verified'])->name('allProducts');
 Route::get('/viewCart',[UserController::class, 'viewCart'])->middleware(['auth', 'verified'])->name('viewCart');
+Route::get('/viewProductDetails/{id}',[UserController::class,'viewProductDetail'])->middleware(['auth', 'verified'])->name('user.viewProduct');
+Route::post('confirm_order',[UserController::class,'confirm_order'])->middleware(['auth', 'verified'])->name('confirm_order');
+Route::get('/checkout',[UserController::class, 'checkOut'])->middleware(['auth', 'verified'])->name('checkOut');
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -42,7 +47,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
    Route::get('/editUser/{id}',[UserController::class,'editUser'])->name('admin.editUser');
   Route::post('/searchProduct',[AdminController::class,'searchProduct'])->name('admin.searchProduct');
   Route::put('/updateUser/{user}',[UserController::class,'updateUser'])->name('admin.updateUser');
-  Route::get('/viewProductDetails/{id}',[UserController::class,'viewProductDetail'])->name('user.viewProduct');
+  Route::get('/viewOrders', [AdminController::class, 'viewOrder'])->name('admin.viewOrder');
+ 
 
 });
 

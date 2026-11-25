@@ -169,9 +169,9 @@
 
             <div class="row g-5">
                 @if(session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
                 @endif
                 <div class="col-lg-8">
                     <div class="table-responsive">
@@ -187,6 +187,9 @@
                             </thead>
 
                             <tbody>
+                                @php
+                                    $price = 0;
+                                @endphp
                                 @foreach($carts as $cart)
                                     <tr>
                                         <td>
@@ -226,6 +229,9 @@
                                             </form>
                                         </td>
                                     </tr>
+                                    @php
+                                        $price += $cart->product->price;
+                                    @endphp
                                 @endforeach
                             </tbody>
                         </table>
@@ -234,8 +240,51 @@
 
                 <div class="col-lg-4">
 
-                </div>
+                    @php
+                        $shipping = $price <= 599 ? 10 : 0;
+                        $total = $price + $shipping;
+                    @endphp
 
+                    <div class="card border-0 shadow-sm rounded-4 p-4">
+
+                        <h4 class="fw-bold text-uppercase mb-4">Order Summary</h4>
+                        <hr>
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="text-secondary">Subtotal</span>
+                            <span class="fw-semibold">${{ number_format($price, 2) }}</span>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="text-secondary">Shipping</span>
+
+                            @if($shipping > 0)
+                                <span class="fw-semibold">${{ number_format($shipping, 2) }}</span>
+                            @else
+                                <span class="fw-semibold text-success">Free</span>
+                            @endif
+                        </div>
+
+                        <hr class="my-3">
+
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="fw-bold mb-0">Total</h5>
+                            <h4 class="fw-bold mb-0">${{ number_format($total, 2) }}</h4>
+                        </div><hr> 
+                    </div>
+                     <a href="{{ route('user.checkOut') }}" class="btn btn-dark w-100 py-3 rounded-3 fw-semibold text-uppercase">
+                    Proceed to Checkout
+                    <i class="bi bi-arrow-right ms-2"></i>
+                </a>
+                </div>
+                <div class="text-center mt-3">
+                    <small class="text-secondary">
+                        <i class="bi bi-shield-check me-1"></i>
+                        Secure checkout
+                    </small>
+                </div>
+            </div>
+            </div>
             </div>
 
         @endif

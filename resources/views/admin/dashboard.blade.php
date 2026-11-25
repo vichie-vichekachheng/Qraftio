@@ -120,7 +120,7 @@
                         <div>
                             <p class="text-secondary mb-2">Total Orders</p>
                             <h2 class="fw-bold text-white mb-0">
-                                {{ $categories->count() }}
+                                {{$orders->count() }}
                             </h2>
                         </div>
 

@@ -52,12 +52,16 @@
 
                     @elseif(Auth::user()->user_type == 'user')
 
-                        <a href="{{view('user.dashboard') }}">
-                            <i class="bi bi-person-circle"></i>
-                            {{ Auth::user()->name }}'s Dashboard
-                        </a>
+    <div class="d-flex align-items-center gap-3">
 
-                    @endif
+        <a href=""
+            class="btn btn-light border rounded-pill px-3 py-2 fw-semibold text-dark">
+            <i class="bi bi-person-circle me-2"></i>
+            {{ Auth::user()->name }}'s Dashboard
+        </a>
+    </div>
+
+@endif
 
                 @else
 

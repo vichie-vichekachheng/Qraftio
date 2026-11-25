@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -11,14 +12,16 @@ class AdminController extends Controller
 {
     
     public function dashboard(){
+        $orders = Order::all();
         $products = Product::all();
         $categories = Category::all();
         $users= User::all();
-        return view("admin.dashboard",compact("products","categories", "users"));
+        $totalOrder = Order::count();
+        return view("admin.dashboard",compact("products","categories", "users", "orders", "totalOrder"));
     } 
     public function addCategory(){
-
-        return view("admin.addCategory");
+        $totalOrder = Order::count();
+        return view("admin.addCategory",compact('totalOrder'));
     }
     public function storeCategory(Request $request){
         $validated = $request->validate([
@@ -38,7 +41,8 @@ class AdminController extends Controller
     }
     public function viewCategory(Category $categories){
         $categories= Category::paginate(10);
-        return view('admin.viewCategory', compact('categories'));
+        $totalOrder = Order::count();
+        return view('admin.viewCategory', compact('categories', 'totalOrder'));
     }
     public function deleteCategory(Category $category){
         $category->delete();
@@ -70,7 +74,8 @@ public function viewCat($id){
 }
 public function addProduct(){
     $categories = Category::all();
-    return view('admin.addProduct', compact('categories'));
+    $totalOrder = Order::count();
+    return view('admin.addProduct', compact('categories', 'totalOrder'));
 }
 public function storeProduct(Request $request){
     $validated = $request->validate([
@@ -97,7 +102,8 @@ public function storeProduct(Request $request){
 
 public function viewProduct(){
     $products = Product::paginate(7);
-    return view('admin.viewProduct', compact('products'));
+    $totalOrder = Order::count();
+    return view('admin.viewProduct', compact('products', 'totalOrder'));
 
 }
 public function deleteProduct(Product $product){
@@ -142,6 +148,10 @@ public function searchUser(Request $request){
 public function searchProduct(Request $request){
     $products = Product::where('product_name', 'LIKE', '%'.$request->search_product. '%')->paginate(10);
     return view('admin.viewProduct', compact('products'));
+}
+public function viewOrder(){
+    $orders = Order::all();
+    return view('admin.viewOrder', compact('orders'));
 }
 
 }

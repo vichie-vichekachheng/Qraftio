@@ -13,7 +13,7 @@
     <!-- Bootstrap 5.3 CSS & Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    @vite(['resources/css/app.css', 'resources/js/app.js']);
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         :root {
             --bg-canvas: #090d16;
@@ -164,8 +164,10 @@
                 <a href="{{ route('admin.viewProduct') }}" class="sidebar-link"><i class="bi bi-box-seam"></i>View Products</a>
                 <div class="sidebar-section-title">Orders Management</div>
                 <div class="d-flex justify-content-between align-items-center">
-                     <a href="{{ route('admin.addProduct') }}" class="sidebar-link"><i class="bi bi-box-seam"></i>View Orders</a>
-                    <span class="badge bg-danger me-5">0</span>
+                     <a href="{{ route('admin.viewOrder') }}" class="sidebar-link"><i class="bi bi-box-seam"></i>View Orders</a>
+                    <span class="badge bg-danger me-5">
+                      {{ $totalOrder ?? 0}}
+                    </span>
                 </div>
                
                 
